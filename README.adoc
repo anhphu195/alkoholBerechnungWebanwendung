@@ -15,3 +15,7 @@ Auf der Einstiegsseite der Anwendung können Gewicht und Geschlecht eingegeben 
 ## Test
 
 Die Anwendung muss sinnvoll getestet sein. Sie sollten auf jeden Fall die Logik (d.h. die Berechnung der BAK) testen. Versuchen Sie die Controllerlogik so einfach wie möglich zu halten.
+
+## TestBranch
+
+Ein neuer Branch wird hinzugefügt
