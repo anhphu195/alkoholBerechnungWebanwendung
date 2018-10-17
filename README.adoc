@@ -3,19 +3,21 @@
 ## Die Anwendung
 
 Sie sollen eine Spring Boot Webanwendung schreiben,
-die den Blutalkoholwert nach der Einnahme von alkoholischen Getränken berechnet.
+die den Blutalkoholwert nach der Einnahme von alkoholischen Getränken berechnet.
 Verwenden Sie zur Berechnung die Widmark-Formel.
-Als Reduktionsfaktoren soll für Männer der Wert 0,7 und für Frauen der Wert 0,6 verwendet werden.
+Als Reduktionsfaktoren soll für Männer der Wert 0,7 und für Frauen der Wert 0,6 verwendet werden.
 Wir gehen davon aus, dass der Rechner nur von erwachsenen Personen verwendet wird.
 
 ## Funktionsweise
 
-Auf der Einstiegsseite der Anwendung können Gewicht und Geschlecht eingegeben werden. Ausserdem können die verzehrten Getränke hinzugefügt werden. Es sollen mindestens 5 verschiedene alkoholische Getränke zur Auswahl stehen. Das Programm soll dann die aktuelle Blutalkoholkonzentration [BAK] als Promillewert anzeigen und den Verlauf des Blutalkoholwertes bis zum Erreichen einer BAK von unter 0.1 Promille graphisch oder tabellarisch darstellen. Promillewerte werden mit genau einer Nachkommastelle angezeigt.
+Auf der Einstiegsseite der Anwendung können Gewicht und Geschlecht eingegeben werden. Ausserdem können die verzehrten Getränke hinzugefügt werden. Es sollen mindestens 5 verschiedene alkoholische Getränke zur Auswahl stehen. Das Programm soll dann die aktuelle Blutalkoholkonzentration [BAK] als Promillewert anzeigen und den Verlauf des Blutalkoholwertes bis zum Erreichen einer BAK von unter 0.1 Promille graphisch oder tabellarisch darstellen. Promillewerte werden mit genau einer Nachkommastelle angezeigt.
 
 ## Test
 
-Die Anwendung muss sinnvoll getestet sein. Sie sollten auf jeden Fall die Logik (d.h. die Berechnung der BAK) testen. Versuchen Sie die Controllerlogik so einfach wie möglich zu halten.
+Die Anwendung muss sinnvoll getestet sein. Sie sollten auf jeden Fall die Logik (d.h. die Berechnung der BAK) testen. Versuchen Sie die Controllerlogik so einfach wie möglich zu halten.
 
 ## TestBranch
 
 Ein neuer Branch wird hinzugefügt
+
+## Test 3
