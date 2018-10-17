@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <div class="navbar navbar-dark bg-primary">
+        <a href="/phu/" class="navbar-brand d-flex align-items-center">
+            <strong>Alkomat</strong>
+        </a>
+    </div>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="popper.min.js"></script>
+    <script type="text/javascript" src="bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#btn1").click(function () {
+                $("oi").append("<br/><label>Getraenk : (in %Vol) </label>\n" +
+                    "                    <select name='getraenkADD' id='getraenkADD' class='custom-select d-block w-100' onchange='addVolumenanteil(this.value)'>\n" +
+                    "                        <option value='0.0' disabled=\"\" selected=\"\" style=\"display:none;\">Auswählen...</option>\n" +
+                    "                        <option value='0.05'>Bier</option>\n" +
+                    "                        <option value='0.025'>BierMix</option>\n" +
+                    "                        <option value='0.06'>Alkopops</option>\n" +
+                    "                        <option value='0.11'>Wein/Seks</option>\n" +
+                    "                        <option value='0.4'>Schnaps</option>\n" +
+                    "                        <option value='0.2'>Likoer</option>\n" +
+                    "                    </select>\n" +
+                    "                    <label>Liter : (in ml)</label>\n" +
+                    "                    <input type=\"number\" name='literADD' id='literADD' th:value=\"0.0\" onchange='addLiter(this.value)'></div>")
+            });
+        });
+    </script>
+</head>
+<body>
+<form action="/phu/berechnen" method="post">
+    <div class="col-md-3 mb-3">
+        <br/>
+        <label>Geswicht : (in Kg)</label>
+        <input type="text" name="massenPerson" value="0.0" th:value="${person?.massenPerson}">
+        <br/>
+        <label>Geschlecht : </label>
+        <select name="verteilungsfaktor" id="verteilungsfaktor" class="custom-select d-block w-100"
+                th:value="${person?.verteilungsfaktor}">
+            <option th:value="0.0" disabled="" selected="" style="display:none;">Auswahl...</option>
+            <option th:value="0.7">Maennlich</option>
+            <option th:value="0.6">Weiblich</option>
+        </select>
+        <br/>
+        <oi>
+            <label>Getraenk : (in %Vol) </label>
+            <select name="getraenk" id="getraenk" class="custom-select d-block w-100">
+                <option th:value="0.0" disabled="" selected="" style="display:none;">Auswählen...</option>
+                <option th:value="0.05">Bier</option>
+                <option th:value="0.025">BierMix</option>
+                <option th:value="0.06">Alkopops</option>
+                <option th:value="0.11">Wein/Seks</option>
+                <option th:value="0.4">Schnaps</option>
+                <option th:value="0.2">Likoer</option>
+            </select>
+            <label>Liter : (in ml)</label>
+            <input type="number" name="liter" id="liter" value="0.0">
+        </oi>
+        <input type="hidden" name="volumenanteils" id="volumenanteils"
+               th:value="${getraenk?.volumenanteils}">
+        <input type="hidden" name="liters" id="liters"
+               th:value="${getraenk?.liters}">
+        <script>
+            var volumenanteils = [];
+            var liter = [];
+
+            function rechneMassenAnteilAlkohol() {
+                var ersteVolumenanteil = document.getElementById('getraenk').value;
+                var ersteLiter = document.getElementById('liter').value;
+                volumenanteils[volumenanteils.length] = ersteVolumenanteil;
+                liter[liter.length] = ersteLiter;
+                document.getElementById("volumenanteils").value = volumenanteils;
+                document.getElementById("liters").value = liter;
+            }
+
+            function addVolumenanteil(val) {
+                volumenanteils.push(val);
+            }
+
+            function addLiter(val) {
+                liter.push(val);
+            }
+
+        </script>
+    </div>
+    <button class="btn btn-primary my-2" type="submit" onclick="rechneMassenAnteilAlkohol()">Berechnen</button>
+</form>
+<button id="btn1" class="btn btn-primary my-2">Add Getraenk</button>
+<button onclick="window.location.href='/'" class="btn btn-secondary my-2">Reset</button>
+<p th:if="${person} != null and ${getraenk} != null" th:text="|BAK ist ${bak.BAK} %|"></p>
+<div>
+    <input type='hidden' class='hid_id' value='1' id="hidden" th:value="${bak?.BAK}"/>
+    <canvas th:if="${person} != null and ${getraenk} != null" id="myChart"></canvas>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var bak = document.getElementById('hidden').value;
+        var bakMoment = document.getElementById('hidden').value;
+        var timer = [];
+        var bakWert = [];
+        var timerMoment = 0;
+        while (bakMoment >= 0.1) {
+            bakWert.push(bakMoment);
+            if (timerMoment == 0) {
+                timer.push("Bei Trinkende");
+            }
+            else {
+                timer.push(timerMoment + " Std. Nach");
+            }
+            timerMoment++;
+            bakMoment = Math.round(10.0*(bakMoment - 0.15))/10.0;
+        }
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: timer,
+                datasets: [{
+                    label: "BAK Grafik fuer " + bak + "% mit genau einer Nachkommastelle",
+                    backgroundColor: 'rgb(0, 191, 255)',
+                    borderColor: 'rgb(0, 191, 255)',
+                    data: bakWert,
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+    </script>
+</div>
+<div class="col-md-3 mb-3">
+    <p>© Made by Anh Phu</p>
+</div>
+</body>
+</html>
